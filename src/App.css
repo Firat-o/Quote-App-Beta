@@ -1,0 +1,239 @@
+/* App.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #1f4f7f;
+  color: #ecf0f1;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+button {
+  background-color: #4caf50;
+  border: none;
+  color: #ffffff;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  display: flex; /* Add */
+  align-items: center; /* Add */
+  justify-content: center; /* Add */
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.loading {
+  font-style: italic;
+  color: #545454;
+}
+
+.register__button {
+  background-color: #df5915;
+}
+
+.register__button:hover {
+  background-color: #ff8800;
+  color: #868686;
+}
+
+/* input fields */
+.form-container {
+  max-width: 300px;
+  margin: 24px auto;
+  padding: 12px;
+  border: 1px solid #f5e7e7;
+  border-radius: 5px;
+  background-color: rgb(234, 236, 244);
+}
+
+.form-container h2 {
+  margin-bottom: 10px;
+}
+
+.form-container input {
+  display: block;
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.form-container input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.form-container button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-container button:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/*style for Quotes component */
+/* App.css */
+
+/* Styling for the quote input and button */
+.quote-input-container {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.quote-input {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.add-quote-button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.add-quote-button:hover {
+  background-color: #45a049;
+}
+
+/* Style for the quote added message */
+.quote-added-message {
+  margin-top: 10px;
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+
+.magic__quote {
+  color: #ff9d00;
+}
+
+.quote-container {
+  margin-top: 20px;
+  text-align: center;
+  border: 2px solid #001d1c;
+  border-radius: 10px;
+  padding: 10px; /* Decreased padding */
+  width: fit-content; /* Adjusted width */
+  background-color: #26701F;
+  box-shadow: 0px 1px 2px rgba(0, 255, 89, 0.387); /* Softer shadow */
+}
+.quote-text {
+  margin-bottom: 20px;
+  color: #ecf0f1;
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.generate-button {
+  margin: 10px auto;
+  display: block;
+}
+
+
+.unlock {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+.gif-image {
+  width: 50%; /* Adjust the width as needed */
+  height: auto;
+  animation: glow 3s infinite alternate; /* Glow animation */
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0px 0px 1px rgb(255, 55, 0); /* Initial shadow (subtle) */
+  }
+  100% {
+    box-shadow: 0px 0px 8px rgb(255, 123, 0); /* Final shadow (intense) */
+  }
+}
+
+
+/* For larger devices like PCs and small devices (up to 768px) */
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.nav .buttons {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.nav button {
+  margin: 5px;
+}
+
+/* Adjust font sizes for small screens */
+@media only screen and (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  .App {
+    margin: 10px;
+  }
+
+  .greeting p {
+    font-size: 14px;
+  }
+
+  .form-container {
+    max-width: 90%;
+  }
+
+  .gif-image {
+    max-width: 100%;
+    height: auto;
+  }
+}
