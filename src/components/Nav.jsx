@@ -3,7 +3,7 @@ import React from "react";
 const Nav = ({ user, onLogin, onRegister, onLogout }) => {
   return (
     <div className="nav">
-      <h1>Quotes to make you strong minded</h1>
+      <h1>Quotes Generator/h1>
       <div className="buttons">
         {!user ? (
           <>
