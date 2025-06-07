@@ -34,6 +34,20 @@ button {
   box-shadow: 0 0 10px rgba(14, 165, 233, 0.4);
 }
 
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 4px #38bdf8;
+  }
+  100% {
+    box-shadow: 0 0 12px #3b82f6;
+  }
+}
+
+.add-quote-button {
+  animation: pulse 2s infinite alternate;
+}
+
+
 button:hover {
   background: linear-gradient(135deg, #38bdf8, #3b82f6);
   transform: scale(1.02);
