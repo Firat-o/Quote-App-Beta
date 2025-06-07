@@ -1,64 +1,128 @@
-/* --- Halo Style Navigation --- */
-/* Import einer passenden, futuristischen Schriftart von Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+/* --- Halo Style Navigation (v2) --- */
 
-/* Der Hauptcontainer für die Navigation */
+/* Import einer passenden, futuristischen Schriftart von Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+
+/* NEU: CSS Custom Properties (Variablen)
+  Macht das Anpassen von Farben und Schriftarten im gesamten Theme super einfach.
+*/
+:root {
+  --halo-font: 'Orbitron', sans-serif;
+  --halo-primary-glow: #0ea5e9;
+  --halo-secondary-glow: #38bdf8;
+  --halo-dark-bg: #0f172a;
+  --halo-light-text: #e0f2fe;
+  --halo-border-radius: 0; /* Geändert für schärfere Kanten */
+  --halo-transition-speed: 0.3s;
+}
+
+/* Der äußere Container - bleibt 100% breit für den Hintergrund */
 .halo-nav {
   width: 100%;
+  background-color: rgba(15, 23, 42, 0.8);
+  border-bottom: 2px solid var(--halo-primary-glow);
+  box-shadow: 0 0 15px rgba(14, 165, 233, 0.5);
+  backdrop-filter: blur(5px);
+  padding: 1rem 0; /* Vertikales Padding, horizontales wird vom inneren Container gesteuert */
+  margin-bottom: 2rem;
+  position: sticky; /* Hält die Navi beim Scrollen oben */
+  top: 0;
+  z-index: 50;
+}
+
+/* NEU: Der innere Container
+  Dieser löst das Problem mit dem Abstand zum Rand. Er hat eine maximale Breite
+  und zentriert sich automatisch.
+*/
+.nav-container {
+  width: 100%;
+  max-width: 1200px; /* Maximale Breite auf großen Bildschirmen */
+  margin: 0 auto; /* Zentriert den Container */
+  padding: 0 2rem; /* Sorgt für den Abstand links und rechts */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background-color: rgba(15, 23, 42, 0.8); /* Dunkelblau, leicht transparent */
-  border-bottom: 2px solid #0ea5e9; /* Leuchtender unterer Rand */
-  box-shadow: 0 0 15px rgba(14, 165, 233, 0.5);
-  backdrop-filter: blur(5px); /* "Glas"-Effekt für modernen Look */
-  margin-bottom: 20px; /* Abstand zum restlichen Inhalt */
+  gap: 1.5rem; /* Abstand zwischen Logo und Menü */
 }
 
 /* Styling für das Logo/den Titel */
 .nav-logo {
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--halo-font);
   font-weight: 700;
-  font-size: 24px;
-  color: #e0f2fe;
+  font-size: 1.5rem; /* OPTIMIERT: rem statt px für Skalierbarkeit */
+  color: var(--halo-light-text);
   text-transform: uppercase;
-  /* Leuchteffekt für den Text */
-  text-shadow: 0 0 4px #38bdf8, 0 0 8px #0ea5e9;
+  text-shadow: 0 0 4px var(--halo-secondary-glow), 0 0 8px var(--halo-primary-glow);
   letter-spacing: 2px;
+  flex-shrink: 0; /* Verhindert, dass das Logo schrumpft */
 }
 
 /* Liste für die Menü-Buttons */
 .nav-menu {
   list-style: none;
   display: flex;
-  gap: 15px; /* Abstand zwischen den Buttons */
+  align-items: center;
+  gap: 1rem;
   margin: 0;
   padding: 0;
 }
 
 /* Spezifisches Button-Styling für den Halo-Look */
 .halo-nav button {
-  font-family: 'Orbitron', sans-serif; /* Gleiche futuristische Schrift */
+  font-family: var(--halo-font);
+  font-weight: 500;
   background: transparent;
-  border: 2px solid #38bdf8;
-  color: #e0f2fe;
-  padding: 10px 22px;
-  font-size: 16px;
+  border: 2px solid var(--halo-secondary-glow);
+  color: var(--halo-light-text);
+  padding: 0.6rem 1.25rem; /* OPTIMIERT: rem Einheiten */
+  font-size: 0.9rem; /* Leicht verkleinert für besseres Aussehen */
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.3s ease;
   box-shadow: inset 0 0 8px rgba(56, 189, 248, 0.4), 0 0 8px rgba(56, 189, 248, 0.4);
-  
-  /* Geometrische Form mit abgeschnittenen Ecken */
   clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  
+  /* OPTIMIERT: Gezieltere Transition für bessere Performance */
+  transition: background-color var(--halo-transition-speed) ease, 
+              color var(--halo-transition-speed) ease, 
+              transform var(--halo-transition-speed) ease,
+              box-shadow var(--halo-transition-speed) ease;
 }
 
-.halo-nav button:hover,
-.halo-nav button:focus {
-  background: #0ea5e9;
-  color: #0f172a; /* Dunkler Text auf hellem Grund */
+.halo-nav button:hover {
+  background: var(--halo-primary-glow);
+  color: var(--halo-dark-bg);
   box-shadow: inset 0 0 10px rgba(15, 23, 42, 0.5), 0 0 20px rgba(14, 165, 233, 0.8);
   transform: scale(1.05);
-  outline: none;
+}
+
+/* VERBESSERT: Besserer Fokus-Stil für Barrierefreiheit (Tastatur-Navigation) */
+.halo-nav button:focus-visible {
+  outline: 2px solid var(--halo-secondary-glow);
+  outline-offset: 3px;
+  background: var(--halo-primary-glow);
+  color: var(--halo-dark-bg);
+}
+
+
+/* NEU: Responsive Anpassungen für Mobilgeräte
+*/
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column; /* Stacking: Logo über dem Menü */
+    gap: 1rem;
+  }
+
+  .nav-logo {
+    font-size: 1.25rem; /* Etwas kleiner auf dem Handy */
+  }
+
+  .nav-menu {
+    width: 100%;
+    justify-content: center; /* Zentriert die Buttons */
+  }
+
+  .halo-nav button {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+  }
 }
