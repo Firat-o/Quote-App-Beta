@@ -16,7 +16,8 @@ import { db } from "./firebase/init";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Für den initialen Ladevorgang der Seite
+  const [authLoading, setAuthLoading] = useState(false); // Für Login/Register Aktionen
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [loginError, setLoginError] = useState(null);
@@ -43,6 +44,7 @@ function App() {
   };
 
   const handleLogin = (email, password) => {
+    setAuthLoading(true); // Ladezustand starten
     return signInWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
         setUser(user);
@@ -51,8 +53,7 @@ function App() {
         setShowRegisterForm(false);
       })
       .catch((error) => {
-        let errorMessage =
-          "Ein Fehler ist aufgetreten. Bitte versuche es erneut.";
+        let errorMessage = "Ein Fehler ist aufgetreten. Bitte versuche es erneut.";
         if (
           error.code === "auth/user-not-found" ||
           error.code === "auth/wrong-password"
@@ -60,10 +61,14 @@ function App() {
           errorMessage = "Ungültige E-Mail oder Passwort.";
         }
         setLoginError(errorMessage);
+      })
+      .finally(() => {
+        setAuthLoading(false); // Ladezustand immer beenden
       });
   };
 
   const handleRegister = (email, password) => {
+    setAuthLoading(true); // Ladezustand starten
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setUser(userCredential.user);
@@ -72,8 +77,11 @@ function App() {
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
-          alert("User already exists. Please login instead.");
+          alert("Benutzer existiert bereits. Bitte logge dich ein.");
         }
+      })
+      .finally(() => {
+        setAuthLoading(false); // Ladezustand immer beenden
       });
   };
 
@@ -88,6 +96,7 @@ function App() {
       const quotesCollection = collection(db, "quotes");
       await addDoc(quotesCollection, { text: quote, userId: username });
       setQuoteAdded(true);
+      setTimeout(() => setQuoteAdded(false), 5000); // Nachricht nach 5s ausblenden
     } catch (error) {
       console.error("Fehler beim Hinzufügen des Zitats: ", error);
     }
@@ -100,16 +109,7 @@ function App() {
   };
 
   return (
-    <div
-      className="App"
-      style={{
-        backdropFilter: "blur(4px)",
-        backgroundColor: "rgba(15, 23, 42, 0.7)",
-        borderRadius: "10px",
-        padding: "20px",
-        minHeight: "100vh",
-      }}
-    >
+    <div className="App">
       <Nav
         user={user}
         onLogin={login}
@@ -118,66 +118,32 @@ function App() {
       />
 
       {loading ? (
-        <span className="loading">Lädt...</span>
+        <span className="loading">Initialisiere...</span>
       ) : user ? (
         <>
-          <div
-            className="greeting"
-            style={{
-              marginTop: "20px",
-              fontSize: "1.2rem",
-              color: "#7dd3fc",
-              textAlign: "center",
-            }}
-          >
+          <div className="greeting">
             <p>Willkommen, {username}, gönn dir einen Moment Pause.</p>
           </div>
 
           <Quotes />
 
           {quoteAdded && (
-            <p
-              className="quote-added-message"
-              style={{
-                color: "#38bdf8",
-                fontWeight: "bold",
-                marginTop: "10px",
-                textAlign: "center",
-              }}
-            >
+            <p className="quote-added-message">
               ✅ Zitat wurde gespeichert. Refresh nötig!
             </p>
           )}
 
-          <div
-            className="quote-input-container"
-            style={{ marginTop: "20px", display: "flex", gap: "12px" }}
-          >
+          <div className="quote-input-container">
             <input
               type="text"
               value={quoteInput}
               onChange={(e) => setQuoteInput(e.target.value)}
               className="quote-input"
-              style={{
-                flex: 1,
-                padding: "10px",
-                borderRadius: "8px",
-                border: "1px solid #334155",
-                backgroundColor: "#0f172a",
-                color: "#e2e8f0",
-              }}
               placeholder="Dein eigenes Zitat"
             />
             <button
               onClick={handleCreateQuote}
               className="add-quote-button"
-              style={{
-                background: "linear-gradient(135deg, #38bdf8, #3b82f6)",
-                color: "#fff",
-                borderRadius: "8px",
-                padding: "10px 16px",
-                fontWeight: "bold",
-              }}
             >
               Hinzufügen
             </button>
@@ -190,9 +156,18 @@ function App() {
       )}
 
       {showLoginForm && (
-        <LoginForm onSubmit={handleLogin} errorMessage={loginError} />
+        <LoginForm
+          onSubmit={handleLogin}
+          errorMessage={loginError}
+          isLoading={authLoading} // Prop hier übergeben
+        />
       )}
-      {showRegisterForm && <RegisterForm onSubmit={handleRegister} />}
+      {showRegisterForm && (
+        <RegisterForm
+          onSubmit={handleRegister}
+          isLoading={authLoading} // Prop hier übergeben
+        />
+      )}
     </div>
   );
 }
