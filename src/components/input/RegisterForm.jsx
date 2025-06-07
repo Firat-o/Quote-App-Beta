@@ -1,34 +1,52 @@
-// RegisterForm.jsx
+// src/components/input/RegisterForm.jsx
 import React, { useState } from "react";
 
-const RegisterForm = ({ onSubmit }) => {
-  const [email, setEmail] = useState(""); // State for email
-  const [password, setPassword] = useState(""); // State for password
+// 1. Die 'isLoading' Prop hier von App.js empfangen
+const RegisterForm = ({ onSubmit, isLoading }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(email, password); // Pass email and password to onSubmit function
+    // Verhindern, dass das Formular erneut gesendet wird, während es bereits lädt
+    if (isLoading) return;
+    onSubmit(email, password);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Register</h2>
-      <input
-        className="form-container" // Add form-container class
-        type="email"
-        placeholder="real or fake email ;)"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        className="form-container" // Add form-container class
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button type="submit">Register</button>
-    </form>
+    // 2. Die Klasse "form-container" gehört auf ein umgebendes div, nicht auf die Inputs
+    <div className="form-container">
+      <form onSubmit={handleSubmit}>
+        <h2>Registrieren</h2>
+        <input
+          // Die Klasse wird hier nicht benötigt, da sie vom Container gestylt wird
+          type="email"
+          placeholder="deine@email.de"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          // 4. Eingabefelder während des Ladens deaktivieren
+          disabled={isLoading}
+        />
+        <input
+          type="password"
+          placeholder="Passwort"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          // 4. Eingabefelder während des Ladens deaktivieren
+          disabled={isLoading}
+        />
+        {/* 3. Button wird je nach 'isLoading' Zustand angepasst */}
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <span className="loader"></span> // Zeige Spinner beim Laden
+          ) : (
+            "Registrieren" // Ansonsten normaler Text
+          )}
+        </button>
+      </form>
+    </div>
   );
 };
 
