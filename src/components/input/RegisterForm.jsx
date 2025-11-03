@@ -1,50 +1,73 @@
-// src/components/input/RegisterForm.jsx
 import React, { useState } from "react";
 
-// 1. Die 'isLoading' Prop hier von App.js empfangen
 const RegisterForm = ({ onSubmit, isLoading }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPw, setShowPw] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Verhindern, dass das Formular erneut gesendet wird, während es bereits lädt
     if (isLoading) return;
     onSubmit(email, password);
   };
 
   return (
-    // 2. Die Klasse "form-container" gehört auf ein umgebendes div, nicht auf die Inputs
     <div className="form-container">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         <h2>Registrieren</h2>
+
+        <label htmlFor="email">E-Mail</label>
         <input
-          // Die Klasse wird hier nicht benötigt, da sie vom Container gestylt wird
+          id="email"
           type="email"
-          placeholder="deine@email.de"
+          placeholder="name@beispiel.de"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          // 4. Eingabefelder während des Ladens deaktivieren
+          autoComplete="username"
+          aria-describedby="email-hint"
           disabled={isLoading}
         />
-        <input
-          type="password"
-          placeholder="Passwort"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          // 4. Eingabefelder während des Ladens deaktivieren
-          disabled={isLoading}
-        />
-        {/* 3. Button wird je nach 'isLoading' Zustand angepasst */}
+        <p id="email-hint" className="form-hint">
+          Es muss <strong>keine echte E-Mail</strong> sein – ein beliebiger
+          Wert im Format <code>name@domain</code> reicht völlig aus.
+        </p>
+
+        <label htmlFor="password">Passwort</label>
+        <div className="password-row">
+          <input
+            id="password"
+            type={showPw ? "text" : "password"}
+            placeholder="Passwort"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={4}
+            autoComplete="new-password"
+            disabled={isLoading}
+          />
+          <button
+            type="button"
+            className="ghost-btn"
+            onClick={() => setShowPw((v) => !v)}
+            aria-pressed={showPw}
+            disabled={isLoading}
+          >
+            {showPw ? "Verbergen" : "Anzeigen"}
+          </button>
+        </div>
+        <p className="form-hint">
+          Tipp: Ein kurzes Passwort reicht – es geht nur um den Zugang.
+        </p>
+
         <button type="submit" disabled={isLoading}>
-          {isLoading ? (
-            <span className="loader"></span> // Zeige Spinner beim Laden
-          ) : (
-            "Registrieren" // Ansonsten normaler Text
-          )}
+          {isLoading ? <span className="loader" aria-live="polite" /> : "Registrieren"}
         </button>
+
+        <p className="muted">
+          Hinweis: Die Registrierung dient nur der Demo. Es werden keine
+          Bestätigungs-E-Mails versendet.
+        </p>
       </form>
     </div>
   );
