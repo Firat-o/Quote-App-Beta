@@ -1,17 +1,5 @@
 /* --- Halo Style Navigation (v2) --- */
 
-/* Vars */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
-:root {
-  --halo-font: 'Orbitron', sans-serif;
-  --halo-primary-glow: #0ea5e9;
-  --halo-secondary-glow: #38bdf8;
-  --halo-dark-bg: #0f172a;
-  --halo-light-text: #e0f2fe;
-  --halo-border-radius: 0;          /* scharfe Kanten */
-  --halo-transition-speed: 0.3s;
-}
-
 /* Wrapper (volle Breite, sticky) */
 .halo-nav {
   width: 100%;
@@ -27,7 +15,7 @@
 }
 
 /* Inner Container (zentriert, max-width) */
-.nav-container {
+.halo-nav .nav-container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -39,7 +27,7 @@
 }
 
 /* Logo/Titel */
-.nav-logo {
+.halo-nav .nav-logo {
   font-family: var(--halo-font);
   font-weight: 700;
   font-size: 1.5rem;
@@ -51,7 +39,7 @@
 }
 
 /* Menüliste */
-.nav-menu {
+.halo-nav .nav-menu {
   list-style: none;
   display: flex;
   align-items: center;
@@ -96,7 +84,7 @@
   color: var(--halo-dark-bg);
 }
 
-/* Weniger Bewegung, falls gewünscht */
+/* Weniger Bewegung */
 @media (prefers-reduced-motion: reduce) {
   .halo-nav button { transition: none; }
   .halo-nav button:hover { transform: none; }
@@ -104,12 +92,12 @@
 
 /* Mobile */
 @media (max-width: 768px) {
-  .nav-container {
+  .halo-nav .nav-container {
     flex-direction: column;
     gap: 1rem;
   }
-  .nav-logo { font-size: 1.25rem; }
-  .nav-menu {
+  .halo-nav .nav-logo { font-size: 1.25rem; }
+  .halo-nav .nav-menu {
     width: 100%;
     justify-content: center;
   }
