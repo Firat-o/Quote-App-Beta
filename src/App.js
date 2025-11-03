@@ -10,14 +10,14 @@ import {
 import Nav from "./components/Nav";
 import LoginForm from "./components/input/LoginForm";
 import RegisterForm from "./components/input/RegisterForm";
-import Quotes from "./components/extras/RandomQuotes";
+import Quotes from "./components/Quotes"; // ← aktualisierter Pfad
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "./firebase/init";
 
 function App() {
   // auth/loader
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);       // initial app load
+  const [loading, setLoading] = useState(true);          // initial app load
   const [authLoading, setAuthLoading] = useState(false); // login/register in-flight
   const [loginError, setLoginError] = useState(null);
 
@@ -36,23 +36,23 @@ function App() {
     return user.email.split("@")[0];
   }, [user]);
 
-  // keep username in state for Firestore write (keine breaking changes)
+  // keep username in state for Firestore write
   useEffect(() => {
     setUsername(derivedName);
   }, [derivedName]);
 
-  // auth state subscription (sauber entkoppelt + cleanup)
+  // auth state subscription
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u);
       setLoading(false);
       setLoginError(null);
-      if (u) setAuthView(null); // Forme schließen, wenn eingeloggt
+      if (u) setAuthView(null);
     });
     return () => unsub();
   }, []);
 
-  // forms toggles (fehler zurücksetzen)
+  // forms toggles
   const openRegister = useCallback(() => {
     setAuthView("register");
     setLoginError(null);
@@ -110,19 +110,21 @@ function App() {
     }
   }, []);
 
-  // quotes (mit simpler Erfolgsmeldung + Cleanup)
-  const addQuote = useCallback(async (quote) => {
-    try {
-      const quotesCollection = collection(db, "quotes");
-      await addDoc(quotesCollection, { text: quote, userId: username });
-      setQuoteAdded(true);
-      if (hideQuoteAddedTimer.current) clearTimeout(hideQuoteAddedTimer.current);
-      hideQuoteAddedTimer.current = setTimeout(() => setQuoteAdded(false), 5000);
-    } catch (error) {
-      // optional: setLoginError oder Toast
-      console.error("Fehler beim Hinzufügen des Zitats: ", error);
-    }
-  }, [username]);
+  // quotes (mit Erfolgsmeldung + Cleanup)
+  const addQuote = useCallback(
+    async (quote) => {
+      try {
+        const quotesCollection = collection(db, "quotes");
+        await addDoc(quotesCollection, { text: quote, userId: username });
+        setQuoteAdded(true);
+        if (hideQuoteAddedTimer.current) clearTimeout(hideQuoteAddedTimer.current);
+        hideQuoteAddedTimer.current = setTimeout(() => setQuoteAdded(false), 5000);
+      } catch (error) {
+        console.error("Fehler beim Hinzufügen des Zitats: ", error);
+      }
+    },
+    [username]
+  );
 
   useEffect(() => {
     return () => {
@@ -137,6 +139,16 @@ function App() {
     setQuoteInput("");
   }, [quoteInput, addQuote]);
 
+  const handleComposerKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        handleCreateQuote();
+      }
+    },
+    [handleCreateQuote]
+  );
+
   return (
     <div className="App">
       <Nav
@@ -149,37 +161,42 @@ function App() {
       {loading ? (
         <span className="loading" aria-busy="true">Initialisiere…</span>
       ) : user ? (
-        <>
-          <div className="greeting">
+        <main className="container content">
+          <div className="greeting muted">
             <p>Willkommen, {username || "Gast"}, gönn dir einen Moment Pause.</p>
           </div>
 
-          <Quotes />
+          <section className="quote-section card">
+            <Quotes />
+          </section>
 
           {quoteAdded && (
-            <p className="quote-added-message" role="status" aria-live="polite">
+            <p className="quote-added-message success" role="status" aria-live="polite">
               ✅ Zitat gespeichert.
             </p>
           )}
 
-          <div className="quote-input-container">
+          <section className="quote-composer">
             <input
               type="text"
               value={quoteInput}
               onChange={(e) => setQuoteInput(e.target.value)}
+              onKeyDown={handleComposerKeyDown}
               className="quote-input"
               placeholder="Dein eigenes Zitat"
+              autoFocus
               disabled={authLoading}
             />
             <button
               onClick={handleCreateQuote}
               className="add-quote-button"
               disabled={authLoading || !quoteInput.trim()}
+              title="Zitat speichern (Enter)"
             >
               Hinzufügen
             </button>
-          </div>
-        </>
+          </section>
+        </main>
       ) : (
         <div className="greeting" style={{ color: "#94a3b8", textAlign: "center" }}>
           <p>- Bitte registrieren oder einloggen, um die Quote Machine zu nutzen -</p>
