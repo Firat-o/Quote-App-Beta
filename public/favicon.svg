@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="7" result="b" />
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Outer flame -->
+  <path filter="url(#glow)"
+    d="M256 24c40 70 59 133 15 180 54-12 92-49 108-99 40 61 52 120 43 179-12 83-73 176-166 196-116 24-196-56-194-160 1-61 29-116 81-154-7 59 25 91 70 108-17-77 43-131 43-250z"
+    fill="url(#g1)" stroke="#60a5fa" stroke-width="6" />
+
+  <!-- Inner flame -->
+  <path
+    d="M308 180c30 66-12 102-60 119 28-44 6-78-18-100-62 56-84 169 26 204 98-16 126-126 52-223z"
+    fill="url(#g2)" opacity="0.95" />
+
+  <!-- Quote spark (stylized quotation mark) -->
+  <g transform="translate(248,322) scale(1)">
+    <path d="M0 -46c24 0 40 16 40 40s-16 40-40 40-40-16-40-40c0-46 28-78 76-94-24 14-36 32-36 54z"
+          fill="#ff7043"/>
+  </g>
+
+  <!-- Subtle inner ring -->
+  <ellipse cx="256" cy="420" rx="150" ry="24" fill="#0ea5e9" opacity="0.12"/>
+</svg>
