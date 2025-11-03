@@ -10,7 +10,7 @@ import {
 import Nav from "./components/Nav";
 import LoginForm from "./components/input/LoginForm";
 import RegisterForm from "./components/input/RegisterForm";
-import Quotes from "./components/Quotes"; // ← aktualisierter Pfad
+import Quotes from "./components/extras/Quotes";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "./firebase/init";
 
