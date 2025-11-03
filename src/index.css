@@ -1,5 +1,14 @@
-/* index.css – Basis + kleine UX-Verbesserungen */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
 
+:root {
+  --halo-font: 'Orbitron', sans-serif;
+  --halo-primary-glow: #0ea5e9;
+  --halo-secondary-glow: #38bdf8;
+  --halo-dark-bg: #0f172a;
+  --halo-light-text: #e0f2fe;
+  --halo-border-radius: 0;
+  --halo-transition-speed: 0.3s;
+}
 /* Vars (leicht anpassbar) */
 :root {
   --bg-start: #0f172a;
