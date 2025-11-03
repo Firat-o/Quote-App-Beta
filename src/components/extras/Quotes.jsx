@@ -1,7 +1,44 @@
-// src/components/Quotes.jsx
 import React, { useEffect, useMemo, useState } from "react";
-// import GifCampfire from "../assets/GifCampfire.gif";
 
+/* Leicht animierte SVG-Flamme (statt GIF) */
+const Flame = ({ size = 260, playing = true }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 512 512"
+    role="img"
+    aria-label="Ambient flame"
+    className={`flame ${playing ? "is-on" : ""}`}
+  >
+    <defs>
+      <linearGradient id="f1" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0%" stopColor="#0ea5e9" />
+        <stop offset="100%" stopColor="#38bdf8" />
+      </linearGradient>
+      <linearGradient id="f2" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stopColor="#a855f7" />
+        <stop offset="100%" stopColor="#ec4899" />
+      </linearGradient>
+    </defs>
+
+    <path
+      d="M256 24c40 70 59 133 15 180 54-12 92-49 108-99 40 61 52 120 43 179-12 83-73 176-166 196-116 24-196-56-194-160 1-61 29-116 81-154-7 59 25 91 70 108-17-77 43-131 43-250z"
+      fill="url(#f1)"
+    />
+    <path
+      d="M308 180c30 66-12 102-60 119 28-44 6-78-18-100-62 56-84 169 26 204 98-16 126-126 52-223z"
+      fill="url(#f2)"
+      opacity=".95"
+    />
+    <path
+      d="M248 292c22 0 38 16 38 36s-16 36-38 36-38-16-38-36c0-40 26-68 72-82-22 13-34 30-34 46z"
+      fill="#ff7043"
+      opacity=".95"
+    />
+  </svg>
+);
+
+/* Zitate */
 const QUOTES = [
   "Float like a butterfly, sting like a bee. - Muhammad Ali",
   "I hated every minute of training, but I said, 'Don’t quit. Suffer now and live the rest of your life as a champion.' - Muhammad Ali",
@@ -51,7 +88,6 @@ const QUOTES = [
   "I have not failed. I've just found 10,000 ways that won't work. - Thomas Edison",
   "Be not afraid of greatness. Some are born great, some achieve greatness, and others have greatness thrust upon them. - William Shakespeare",
   "Without ambition, one starts nothing. Without work, one finishes nothing. The prize will not be sent to you. You have to win it. - Ralph Waldo Emerson",
-  // neue, thematisch passende:
   "Discipline equals freedom. - Jocko Willink",
   "Hard choices, easy life. Easy choices, hard life. - Jerzy Gregorek",
   "A good plan violently executed now is better than a perfect plan executed next week. - George S. Patton",
@@ -73,6 +109,7 @@ const QUOTES = [
   "Clarity is power. - Tony Robbins",
 ];
 
+/* Shuffle-Deck */
 function shuffleIndices(n) {
   const arr = Array.from({ length: n }, (_, i) => i);
   for (let i = n - 1; i > 0; i--) {
@@ -86,10 +123,18 @@ const Quotes = () => {
   const orderInitial = useMemo(() => shuffleIndices(QUOTES.length), []);
   const [order, setOrder] = useState(orderInitial);
   const [idx, setIdx] = useState(0);
+  const [showFlame, setShowFlame] = useState(() => {
+    const s = localStorage.getItem("showFlame");
+    return s ? s === "1" : false; // standard: AUS
+  });
+
   const quote = QUOTES[order[idx]];
 
+  useEffect(() => {
+    localStorage.setItem("showFlame", showFlame ? "1" : "0");
+  }, [showFlame]);
+
   const nextQuote = () => {
-    // nächstes aus dem „Deck“; neu mischen, wenn durch
     if (idx + 1 >= order.length) {
       setOrder(shuffleIndices(QUOTES.length));
       setIdx(0);
@@ -101,30 +146,30 @@ const Quotes = () => {
   const copyQuote = async () => {
     try {
       await navigator.clipboard.writeText(quote);
-    } catch {
-      // still – optional: Toast/Alert im Projekt
-    }
+    } catch {}
   };
-
-  useEffect(() => {
-    // initial anzeigen
-    // (idx = 0 nutzt bereits das erste aus dem gemischten Deck)
-  }, []);
 
   return (
     <div className="quote-container">
       <p className="quote-text" aria-live="polite">{quote}</p>
 
+      {showFlame && (
+        <div className="flame-wrap">
+          <Flame size={260} playing />
+        </div>
+      )}
+
       <div className="quote-actions">
-        <button className="generate-button" onClick={nextQuote}>
-          Generate Quote
-        </button>
-        <button className="copy-button" onClick={copyQuote} title="Copy to clipboard">
-          Copy
+        <button className="generate-button" onClick={nextQuote}>Generate Quote</button>
+        <button className="copy-button" onClick={copyQuote} title="Copy to clipboard">Copy</button>
+        <button
+          className="button-secondary"
+          onClick={() => setShowFlame((v) => !v)}
+          title="Ambient-Animation ein/aus"
+        >
+          {showFlame ? "Flamme aus" : "Flamme an"}
         </button>
       </div>
-
-      {/* <img className="gif-image" src={GifCampfire} alt="" /> */}
     </div>
   );
 };
