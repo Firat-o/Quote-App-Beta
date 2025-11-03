@@ -1,5 +1,4 @@
 import React from "react";
-import Flame from "./Flame";
 
 
 const Flame = ({ size = 260, playing = true }) => (
