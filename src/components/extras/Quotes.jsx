@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import Flame from "./Flame";
 
 /* Leicht animierte SVG-Flamme (statt GIF) */
 const Flame = ({ size = 260, playing = true }) => (
